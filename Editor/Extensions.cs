@@ -62,18 +62,25 @@ namespace Smidgenomics.Unity.Variables.Editor
 
 namespace Smidgenomics.Unity.Variables.Editor
 {
+	using System;
 	using System.Reflection;
 
 	internal static class Reflection_
 	{
-		public static string GetPrettyName(this MethodInfo m, bool parens = true)
-		{
-			return ReflectionUtility.FormatMethodName(m, parens);
-		}
-
 		public static string GetStringifiedType(this object o, string defaultValue = "")
 		{
-			return ReflectionUtility.GetStringifiedType(o, defaultValue);
+			return EditorReflection.GetStringifiedType(o, defaultValue);
+		}
+
+		public static Type GetFirstGenericType(this FieldInfo fi)
+		{
+			var t = fi.FieldType;
+			if (t.IsArray)
+			{
+				t = t.GetElementType();
+			}
+			var args = t.GetGenericArguments();
+			return args.Length > 0 ? args[0] : null; ;
 		}
 	}
 }

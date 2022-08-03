@@ -7,6 +7,10 @@ namespace Smidgenomics.Unity.Variables
 	/// </summary>
 	internal static class Config
 	{
+
+		/// <summary>
+		/// CreateAssetMenuAttribute, menuName
+		/// </summary>
 		public static class CreateAssetMenu
 		{
 			public const string

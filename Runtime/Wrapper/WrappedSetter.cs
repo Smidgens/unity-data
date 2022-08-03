@@ -12,7 +12,7 @@ namespace Smidgenomics.Unity.Variables
 	[Serializable]
 	public class WrappedSetter<VT>
 	{
-		public void SetValue(VT v)
+		public void Set(VT v)
 		{
 			if (!Application.isEditor) { SetValueCached(v); }
 			else { SetValueUncached(v); }

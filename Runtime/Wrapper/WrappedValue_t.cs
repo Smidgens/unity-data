@@ -17,10 +17,12 @@ namespace Smidgenomics.Unity.Variables
 		/// <summary>
 		/// Use asset
 		/// </summary>
+		[InspectorName("Variable")]
 		Asset,
 		/// <summary>
 		/// Generic getter
 		/// </summary>
+		[InspectorName("Method")]
 		Getter,
 	}
 
@@ -79,9 +81,6 @@ namespace Smidgenomics.Unity.Variables
 		private T GetAssetValue() => _vAsset ? _vAsset.Value : default;
 		private T GetStaticValue() => _vStatic;
 		private T GetGetterValue() => _vGetter.Value;
-
-		
-
 	}
 }
 
@@ -98,7 +97,6 @@ namespace Smidgenomics.Unity.Variables.Editor
 		{
 			public const string
 			VALUE_TYPE = "_type";
-
 			public static string GetTypeField(int type)
 			{
 				if(type < 0 || type >= _VALUE_FIELDS.Length) { return null; }

@@ -3,8 +3,8 @@
 namespace Smidgenomics.Unity.Variables
 {
 	using System;
-	using System.Reflection;
 	using System.Linq;
+	using System.Reflection;
 	using BFlags = System.Reflection.BindingFlags;
 
 	/// <summary>
@@ -36,28 +36,6 @@ namespace Smidgenomics.Unity.Variables
 		}
 
 		/// <summary>
-		/// Returns a string with type and assembly info for object
-		/// </summary>
-		public static string GetStringifiedType(object o, string dv = "")
-		{
-			if (o == null) { return dv; }
-			var t = o.GetType();
-			var tn = t.FullName;
-			var nn = t.Assembly.GetName().Name;
-			return $"{tn}, {nn}";
-		}
-
-		public static bool IsGetter(MethodInfo m, Type vtype)
-		{
-			return MatchSignature(m, vtype);
-		}
-
-		public static bool IsSetter(MethodInfo m, Type vtype)
-		{
-			return MatchSignature(m, typeof(void), vtype);
-		}
-
-		/// <summary>
 		/// Checks if method is getter with call signature
 		/// </summary>
 		public static bool MatchSignature(MethodInfo m, Type rt, params Type[] ptypes)
@@ -65,94 +43,6 @@ namespace Smidgenomics.Unity.Variables
 			if (rt != m.ReturnType) { return false; }
 			if (!MatchArgTypes(m, ptypes)) { return false; }
 			return true;
-		}
-
-		/// <summary>
-		/// Prettify method name
-		/// </summary>
-		public static string FormatMethodName(MethodInfo m, in bool includeParens = true)
-		{
-			var n = m.Name;
-			if (IsPropertyName(m.Name))
-			{
-				return n.Substring(4);
-			}
-
-			return n;
-
-
-			//var ptypes = m.GetParameters();
-			//var n = m.Name;
-			//if (IsPropertyName(n))
-			//{
-			//	if(m.ReturnType == typeof(void))
-			//	{
-			//		return FormatTypeName(ptypes[0].ParameterType) + " " + n.Substring(4);
-			//	}
-
-			//	return FormatTypeName(m.ReturnType) + " "  + n.Substring(4);
-			//}
-
-			//if (!includeParens) { return n; }
-
-			//var p = new System.Text.StringBuilder(n);
-
-			//p.Append(' ');
-			//p.Append('(');
-
-			
-			//int i = 0;
-			//foreach (var pi in ptypes)
-			//{
-
-			//	p.Append(FormatTypeName(pi.ParameterType));
-
-			//	//if (pi.ParameterType.IsPrimitive)
-			//	//{
-			//	//	p.Append(pi.ParameterType.Name.ToLower());
-			//	//}
-			//	//else
-			//	//{
-			//	//	p.Append(pi.ParameterType.Name);
-			//	//}
-			//	if(i < ptypes.Length - 1)
-			//	{
-			//		p.Append(',');
-			//	}
-			//}
-			//p.Append(')');
-
-			//return p.ToString();
-		}
-
-		/// <summary>
-		/// Prettify method name
-		/// </summary>
-		public static string FormatMethodName(in string n, in bool includeParens = true)
-		{
-			if (IsPropertyName(n)) { return n.Substring(4); } // trim property prefix
-			return includeParens ? n + " ()" : n;
-		}
-
-		public static string GetDisplayName(Type t)
-		{
-			if(t == typeof(int)) { return "int"; }
-			if(t == typeof(string)) { return "string"; }
-			if(t == typeof(double)) { return "double"; }
-			if(t == typeof(float)) { return "float"; }
-			if(t == typeof(bool)) { return "bool"; }
-			if (t.IsPrimitive) { return t.Name.ToLower(); }
-			return t.Name;
-		}
-
-		private static bool IsPropertyName(in string n)
-		{
-			if(n.Length < 5) { return false; } // get_[x] or set_[x]
-			return
-			(n[0] == 'g' || n[0] == 's')
-			&& n[1] == 'e'
-			&& n[2] == 't'
-			&& n[3] == '_';
 		}
 
 		private static bool MatchArgTypes(MethodInfo m, Type[] types)

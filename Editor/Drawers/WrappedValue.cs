@@ -4,7 +4,8 @@ namespace Smidgenomics.Unity.Variables.Editor
 {
 	using UnityEditor;
 	using UnityEngine;
-
+	using SP = UnityEditor.SerializedProperty;
+	
 	/// <summary>
 	/// Custom drawer for value ref
 	/// </summary>
@@ -16,7 +17,21 @@ namespace Smidgenomics.Unity.Variables.Editor
 		public const double PADDING = 2.0;
 
 		// [type][value]
-		public static readonly float[] SIZES = { 60f, 1f, };
+		public static readonly float[] SIZES = { 67f, 1f, };
+
+		public override float GetPropertyHeight(SP prop, GUIContent label)
+		{
+			if (fieldInfo.FieldType.IsArray)
+			{
+				return EditorGUIUtility.singleLineHeight;
+			}
+			var type = prop.FindPropertyRelative(SPHelper.WrappedValue.VALUE_TYPE);
+			if (type.enumValueIndex != 2)
+			{
+				return EditorGUIUtility.singleLineHeight;
+			}
+			return (EditorGUIUtility.singleLineHeight * 2f) + 2f;
+		}
 
 		public override void OnGUI(Rect pos, SerializedProperty prop, GUIContent l)
 		{
