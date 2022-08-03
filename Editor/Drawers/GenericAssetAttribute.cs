@@ -28,7 +28,11 @@ namespace Smidgenomics.Unity.Variables.Editor
 				blabel = prop.objectReferenceValue.name;
 			}
 
-			if(GUI.Button(pos, blabel, EditorStyles.popup))
+			var rects = pos.SplitHorizontally(2.0, pos.height, 1f);
+
+			DrawPreview(rects[0], prop.objectReferenceValue);
+
+			if (GUI.Button(rects[1], blabel, EditorStyles.popup))
 			{
 				var type = fieldInfo.FieldType;
 
@@ -51,7 +55,6 @@ namespace Smidgenomics.Unity.Variables.Editor
 
 				m.AddSeparator("");
 
-
 				var gtype = GetGenericType();
 
 				var title = $"{EditorReflection.GetDisplayName(gtype)}";
@@ -64,11 +67,8 @@ namespace Smidgenomics.Unity.Variables.Editor
 				{
 					var val = path;
 					var name = path.Split('/').LastOrDefault().Split('.').FirstOrDefault();
-
 					var label = new GUIContent(name);
-
 					var active = path == currentPath;
-
 					m.AddItem(label, active, () =>
 					{
 						var a = AssetDatabase.LoadAssetAtPath<ScriptableValue>(val);
@@ -78,6 +78,28 @@ namespace Smidgenomics.Unity.Variables.Editor
 					});
 				}
 				m.DropDown(pos);
+			}
+		}
+
+		private void DrawPreview(in Rect pos, UnityEngine.Object ob)
+		{
+			var tex = ob
+			? AssetPreview.GetMiniThumbnail(ob)
+			: AssetPreview.GetMiniTypeThumbnail(typeof(ScriptableValue));
+			GUI.Box(pos, "");
+
+			if (tex) { GUI.DrawTexture(pos, tex); }
+
+			if(ob)
+			{
+				EditorGUIUtility.AddCursorRect(pos, MouseCursor.Link);
+
+				if(GUI.Button(pos, GUIContent.none, GUIStyle.none))
+				{
+					EditorGUIUtility.PingObject(ob);
+				}
+
+
 			}
 		}
 
@@ -105,9 +127,22 @@ namespace Smidgenomics.Unity.Variables.Editor
 				{
 					ta = ta.BaseType;
 				}
+
 				var vtype = ta.GenericTypeArguments[0];
-				if (vtype != t) { continue; }
-				r.Add(path);
+
+				if (t.IsPrimitive)
+				{
+					if(t != vtype) { continue; }
+				}
+
+
+				if (vtype == t || t.IsAssignableFrom(vtype))
+				{
+					r.Add(path);
+				}
+
+				//if (vtype != t) { continue; }
+				//r.Add(path);
 			}
 
 			return r.ToArray();

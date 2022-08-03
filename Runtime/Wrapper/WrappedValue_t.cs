@@ -79,11 +79,6 @@ namespace Smidgenomics.Unity.Variables
 			return default;
 		}
 
-		//private T GetAssetValue()
-		//{
-		//	if (!_vAsset.isSet || _vAsset.isBroken) { return default; }
-		//	return _vAsset.asset.Value;
-		//}
 		private T GetAssetValue()
 		{
 			if (!_vAsset) { return default; }

@@ -4,6 +4,7 @@ namespace Smidgenomics.Unity.Variables.Editor
 {
 	using UnityEditor;
 	using UnityEngine;
+	using System;
 	using SP = UnityEditor.SerializedProperty;
 	
 	/// <summary>
@@ -18,6 +19,11 @@ namespace Smidgenomics.Unity.Variables.Editor
 
 		// [type][value]
 		public static readonly float[] SIZES = { 70f, 1f, };
+
+		public readonly Lazy<Texture> FN_ICON = new Lazy<Texture>(() =>
+		{
+			return Resources.Load<Texture>("smidgenomics.unity.scriptable-variables/arrow");
+		});
 
 		public override float GetPropertyHeight(SP prop, GUIContent label)
 		{
@@ -35,6 +41,7 @@ namespace Smidgenomics.Unity.Variables.Editor
 
 		public override void OnGUI(Rect pos, SP prop, GUIContent l)
 		{
+
 			using (new EditorGUI.PropertyScope(pos, l, prop))
 			{
 				// source type
@@ -57,11 +64,33 @@ namespace Smidgenomics.Unity.Variables.Editor
 				// type field
 				EditorGUI.PropertyField(cols[0], type, GUIContent.none);
 
+
+				if(type.enumValueIndex == 2)
+				{
+					var irect = cols[0];
+					irect.height = EditorGUIUtility.singleLineHeight;
+					irect.width = irect.height;
+
+					irect.position += new Vector2(cols[0].width - irect.width, irect.height + 2f);
+
+					if (FN_ICON.Value)
+					{
+						GUI.DrawTexture(irect, FN_ICON.Value);
+					}
+
+
+					//EditorGUI.DrawRect(irect, Color.red);
+				}
+
 				// display different prop depending on source type
 				var sourcePropName = SPHelper.WrappedValue.GetTypeField(type.enumValueIndex);
-				if (sourcePropName != null)
+
+				var valueProp = sourcePropName != null
+				? prop.FindPropertyRelative(sourcePropName)
+				: null;
+
+				if (valueProp != null)
 				{
-					var valueProp = prop.FindPropertyRelative(sourcePropName);
 					EditorGUI.PropertyField(cols[1], valueProp, GUIContent.none); // draw value field
 				}
 				else
