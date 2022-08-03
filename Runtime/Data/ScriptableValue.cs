@@ -38,7 +38,7 @@ namespace Smidgenomics.Unity.Variables
 		// editor only description (documentation)
 		#if UNITY_EDITOR
 		[TextArea(2, 10)]
-		[SerializeField] private string _description = default;
+		[SerializeField] private string _notes = default;
 		#endif
 
 	}

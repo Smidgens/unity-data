@@ -17,12 +17,11 @@ namespace Smidgenomics.Unity.Variables
 		/// <summary>
 		/// Use asset
 		/// </summary>
-		[InspectorName("Variable")]
 		Asset,
 		/// <summary>
 		/// Generic getter
 		/// </summary>
-		[InspectorName("Method")]
+		[InspectorName("Function")]
 		Getter,
 	}
 
@@ -32,7 +31,8 @@ namespace Smidgenomics.Unity.Variables
 	/// <typeparam name="T">Value type</typeparam>
 	/// <typeparam name="AT">Asset type supported</typeparam>
 	[Serializable]
-	public abstract class WrappedValue<T, AT> where AT : ScriptableValue<T>
+	public class WrappedValue<T>
+	//public abstract class WrappedValue<T, AT> where AT : ScriptableValue
 	{
 		/// <summary>
 		/// Reads value
@@ -49,7 +49,7 @@ namespace Smidgenomics.Unity.Variables
 		/// Implicit conversion to return type
 		/// </summary>
 		/// <param name="valueSource">Instance</param>
-		public static implicit operator T(WrappedValue<T, AT> valueSource)
+		public static implicit operator T(WrappedValue<T> valueSource)
 		{
 			return valueSource.Value;
 		}
@@ -61,7 +61,8 @@ namespace Smidgenomics.Unity.Variables
 			_type = ValueSource.Static;
 		}
 
-		[SerializeField] internal AT _vAsset = default;
+		[GenericAsset(typeof(ScriptableValue))]
+		[SerializeField] internal ScriptableValue<T> _vAsset = default;
 		[SerializeField] private T _vStatic = default;
 		[SerializeField] private WrappedGetter<T> _vGetter = default;
 		[SerializeField] private ValueSource _type = ValueSource.Static;
@@ -78,7 +79,17 @@ namespace Smidgenomics.Unity.Variables
 			return default;
 		}
 
-		private T GetAssetValue() => _vAsset ? _vAsset.Value : default;
+		//private T GetAssetValue()
+		//{
+		//	if (!_vAsset.isSet || _vAsset.isBroken) { return default; }
+		//	return _vAsset.asset.Value;
+		//}
+		private T GetAssetValue()
+		{
+			if (!_vAsset) { return default; }
+			return _vAsset.Value;
+		}
+
 		private T GetStaticValue() => _vStatic;
 		private T GetGetterValue() => _vGetter.Value;
 	}

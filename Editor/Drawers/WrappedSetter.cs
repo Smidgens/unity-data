@@ -28,13 +28,14 @@ namespace Smidgenomics.Unity.Variables.Editor
 				var type = prop.FindPropertyRelative(SPHelper.WrappedMethod.TYPE);
 				var method = prop.FindPropertyRelative(SPHelper.WrappedMethod.METHOD);
 
-				pos.height = EditorGUIUtility.singleLineHeight;
-
 				// label
 				if (l != GUIContent.none && !fieldInfo.FieldType.IsArray)
 				{
 					pos = EditorGUI.PrefixLabel(pos, l);
 				}
+
+				//pos.height = EditorGUIUtility.singleLineHeight;
+
 
 				var rects = GetFieldRects(pos);
 

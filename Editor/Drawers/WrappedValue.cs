@@ -9,7 +9,7 @@ namespace Smidgenomics.Unity.Variables.Editor
 	/// <summary>
 	/// Custom drawer for value ref
 	/// </summary>
-	[CustomPropertyDrawer(typeof(WrappedValue<,>), true)]
+	[CustomPropertyDrawer(typeof(WrappedValue<>), true)]
 	internal class WrappedValue_Drawer : PropertyDrawer
 	{
 		// width of source type dropdown
@@ -17,7 +17,7 @@ namespace Smidgenomics.Unity.Variables.Editor
 		public const double PADDING = 2.0;
 
 		// [type][value]
-		public static readonly float[] SIZES = { 67f, 1f, };
+		public static readonly float[] SIZES = { 70f, 1f, };
 
 		public override float GetPropertyHeight(SP prop, GUIContent label)
 		{
@@ -33,7 +33,7 @@ namespace Smidgenomics.Unity.Variables.Editor
 			return (EditorGUIUtility.singleLineHeight * 2f) + 2f;
 		}
 
-		public override void OnGUI(Rect pos, SerializedProperty prop, GUIContent l)
+		public override void OnGUI(Rect pos, SP prop, GUIContent l)
 		{
 			using (new EditorGUI.PropertyScope(pos, l, prop))
 			{
@@ -45,6 +45,12 @@ namespace Smidgenomics.Unity.Variables.Editor
 				{
 					pos = EditorGUI.PrefixLabel(pos, l);
 				}
+
+				if (fieldInfo.FieldType.IsArray)
+				{
+					pos.height = EditorGUIUtility.singleLineHeight;
+				}
+
 
 				var cols = pos.SplitHorizontally(PADDING, SIZES);
 

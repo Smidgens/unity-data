@@ -11,10 +11,9 @@ namespace Smidgenomics.Unity.Variables.Editor
 	[CustomPropertyDrawer(typeof(WrappedGetter<>))]
 	internal class WrappedGetter_Drawer : PropertyDrawer
 	{
-
 		public override float GetPropertyHeight(SP prop, GUIContent label)
 		{
-			if (fieldInfo.FieldType.IsArray)
+			if (label == GUIContent.none)
 			{
 				return EditorGUIUtility.singleLineHeight;
 			}
@@ -29,22 +28,31 @@ namespace Smidgenomics.Unity.Variables.Editor
 				var type = prop.FindPropertyRelative(SPHelper.WrappedGetter.TYPE);
 				var method = prop.FindPropertyRelative(SPHelper.WrappedGetter.METHOD);
 
+				var rows =
+				!fieldInfo.FieldType.IsArray;
+
+				// temporary hack
+				if(pos.height < EditorGUIUtility.singleLineHeight + 5f)
+				{
+					rows = false;
+				}
+
 				// label
 				if (l != GUIContent.none && !fieldInfo.FieldType.IsArray)
 				{
 					pos = EditorGUI.PrefixLabel(pos, l);
 				}
 
-				var rects = GetFieldRects(pos);
+				var rects = GetFieldRects(pos, rows);
 
 				TargetField(rects[0], target, type, method);
 				MethodField(rects[1], target, type, method);
 			}
 		}
 
-		private Rect[] GetFieldRects(Rect pos)
+		private Rect[] GetFieldRects(Rect pos, bool rows)
 		{
-			if (!fieldInfo.FieldType.IsArray)
+			if (rows)
 			{
 				var t = pos;
 				t.height = EditorGUIUtility.singleLineHeight;
@@ -52,6 +60,7 @@ namespace Smidgenomics.Unity.Variables.Editor
 				b.position += new Vector2(0f, t.height + 2f);
 				return new Rect[] { t, b };
 			}
+
 			var cols = pos.width < Config.WrappedMethod.FIXED_BREAKPOINT
 			? pos.SplitHorizontally(2.0, Config.WrappedMethod.SIZES_FLUID)
 			: pos.SplitHorizontally(2.0, Config.WrappedMethod.SIZES_FIXED);
