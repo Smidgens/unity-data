@@ -7,6 +7,13 @@ namespace Smidgenomics.Unity.Variables.Editor
 	/// </summary>
 	internal static class Config
 	{
+
+		public static class ResourcePath
+		{
+			public const string ICON_ATLAS = _PATH + "/{icons}";
+			private const string _PATH = "smidgenomics.scriptable-variables";
+		}
+
 		public static class Label
 		{
 			public const string NO_FUNCTION_SET = "No Function";

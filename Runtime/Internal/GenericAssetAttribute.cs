@@ -2,20 +2,17 @@
 
 namespace Smidgenomics.Unity.Variables
 {
-
 	using System;
 	using UnityEngine;
 
 	[AttributeUsage(AttributeTargets.Field)]
-	internal class GenericAssetAttribute : PropertyAttribute
+	internal class AssetValueSearchAttribute : PropertyAttribute
 	{
 		public Type BaseType { get; }
 
-
-		public GenericAssetAttribute(Type t)
+		public AssetValueSearchAttribute(Type t)
 		{
 			BaseType = t;
 		}
 	}
-
 }

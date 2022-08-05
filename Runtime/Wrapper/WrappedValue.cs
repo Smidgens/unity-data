@@ -1,55 +1,106 @@
-////// smidgens @ github
+// smidgens @ github
 
+namespace Smidgenomics.Unity.Variables
+{
+	using UnityEngine;
+	using System;
 
-//namespace Smidgenomics.Unity.Variables
-//{
-//	using System;
-//	using UVector2 = UnityEngine.Vector2;
-//	using UVector3 = UnityEngine.Vector3;
-//	using UColor = UnityEngine.Color;
+	/// <summary>
+	/// Determines where value should be pulled from
+	/// </summary>
+	internal enum ValueSource
+	{
+		Static, // fixed
+		Asset, // scriptable object
+		[InspectorName("Function")]
+		Getter, // reflection
+	}
 
-//	/// <summary>
-//	/// Concrete type refs
-//	/// </summary>
-//	public static partial class WrappedValue
-//	{
-//		[Serializable] public class Float : WrappedValue<float> { }
-//		[Serializable] public class Int : WrappedValue<int> { }
-//		[Serializable] public class String : WrappedValue<string> { }
-//		[Serializable] public class Vector2 : WrappedValue<UVector2> { }
-//		[Serializable] public class Vector3 : WrappedValue<UVector3> { }
-//		[Serializable]
-//		public class Color : WrappedValue<UColor>
-//		{
-//			public static Color White => new Color(UColor.white);
-//			public static Color Black => new Color(UColor.black);
-//			public static Color Clear => new Color(UColor.clear);
-//			public Color(UColor staticValue) => SetStatic(staticValue);
-//		}
-//	}
-//}
+	/// <summary>
+	/// Wrapper around value, hides source
+	/// </summary>
+	/// <typeparam name="T">Value type</typeparam>
+	/// <typeparam name="AT">Asset type supported</typeparam>
+	[Serializable]
+	public class WrappedValue<T>
+	//public abstract class WrappedValue<T, AT> where AT : ScriptableValue
+	{
+		/// <summary>
+		/// Reads value
+		/// </summary>
+		public T Value => GetValue();
 
-//namespace Smidgenomics.Unity.Variables
-//{
-//	using System;
-//	using UnityCurve = UnityEngine.AnimationCurve;
+		/// <summary>
+		/// Reads and stringifies current value
+		/// </summary>
+		/// <returns>Stringified value</returns>
+		public override string ToString() => GetValue().ToString();
 
-//	partial class WrappedValue
-//	{
-//		[Serializable]
-//		public class AnimationCurve : WrappedValue<UnityCurve>
-//		{
-//			public static AnimationCurve Linear01 => new AnimationCurve(UnityCurve.Linear(0f, 0f, 1f, 1f));
-//			public static AnimationCurve EaseInOut01 => new AnimationCurve(UnityCurve.EaseInOut(0f, 0f, 1f, 1f));
-//			public AnimationCurve(UnityCurve staticValue = default) => SetStatic(staticValue);
-//			public static AnimationCurve Linear(float ts, float vs, float te, float ve)
-//			{
-//				return new AnimationCurve(UnityCurve.Linear(ts, vs, te, ve));
-//			}
-//			public static AnimationCurve EaseInOut(float ts, float vs, float te, float ve)
-//			{
-//				return new AnimationCurve(UnityCurve.EaseInOut(ts, vs, te, ve));
-//			}
-//		}
-//	}
-//}
+		/// <summary>
+		/// Implicit conversion to return type
+		/// </summary>
+		/// <param name="valueSource">Instance</param>
+		public static implicit operator T(WrappedValue<T> valueSource)
+		{
+			return valueSource.Value;
+		}
+
+		[AssetValueSearch(typeof(ScriptableValue))]
+		[SerializeField] internal ScriptableValue<T> _asset = default;
+		[SerializeField] private WrappedGetter<T> _method = default;
+		[SerializeField] private T _value = default;
+		[SerializeField] private ValueSource _type = ValueSource.Static;
+
+		// select
+		private T GetValue()
+		{
+			switch(_type)
+			{
+				case ValueSource.Static: return GetStaticValue();
+				case ValueSource.Asset: return GetAssetValue();
+				case ValueSource.Getter: return GetGetterValue();
+			}
+			return default;
+		}
+
+		private T GetAssetValue()
+		{
+			if (!_asset) { return default; }
+			return _asset.Value;
+		}
+
+		private T GetStaticValue() => _value;
+		private T GetGetterValue() => _method.Invoke();
+	}
+}
+
+#if UNITY_EDITOR
+
+namespace Smidgenomics.Unity.Variables.Editor
+{
+	internal static partial class SPHelper
+	{
+		/// <summary>
+		/// Editor helper for WrappedValue serialization
+		/// </summary>
+		public static class WrappedValue
+		{
+			public const string
+			VALUE_TYPE = "_type";
+			public static string GetTypeField(int type)
+			{
+				if(type < 0 || type >= _VALUE_FIELDS.Length) { return null; }
+				return _VALUE_FIELDS[type];
+			}
+
+			private static readonly string[] _VALUE_FIELDS =
+			{
+				"_value",
+				"_asset",
+				"_method",
+			};
+		}
+	}
+}
+
+#endif

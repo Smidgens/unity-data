@@ -10,17 +10,17 @@ namespace Smidgenomics.Unity.Variables
 	/// Reflection assisted reference to getter
 	/// </summary>
 	[Serializable]
-	public class WrappedGetter<VT>
+	public class WrappedGetter<T>
 	{
-		public VT Value => GetValue();
+		public T Invoke() => GetValue();
 
 		[SerializeField] private MethodRef _ref = default;
 
 		// method references cached outside editor
-		private Func<VT> _cachedGetter = null;
+		private Func<T> _cachedGetter = null;
 		private MethodInfo _cachedInfo = null;
 
-		private VT GetValue()
+		private T GetValue()
 		{
 			if(!Application.isEditor) { return GetValueCached(); }
 			return GetValueUncached();
@@ -31,18 +31,18 @@ namespace Smidgenomics.Unity.Variables
 		{
 			if (!_ref.target) { return null; }
 			var tt = _ref.target.GetType();
-			return ReflectionUtility.FindMethod(_ref.method, tt, typeof(VT));
+			return ReflectionUtility.FindMethod(_ref.method, tt, typeof(T));
 		}
 
 		// loads method anew before value
-		private VT GetValueUncached()
+		private T GetValueUncached()
 		{
 			var m = LoadMethod();
-			return m != null ? (VT)m.Invoke(_ref.target, new object[0]) : default;
+			return m != null ? (T)m.Invoke(_ref.target, new object[0]) : default;
 		}
 
 		// loads and caches method info before value
-		private VT GetValueCached()
+		private T GetValueCached()
 		{
 			if(_cachedGetter == null)
 			{
@@ -53,11 +53,11 @@ namespace Smidgenomics.Unity.Variables
 			return _cachedGetter.Invoke();
 		}
 
-		private VT GetDefaultValue() => default;
+		private T GetDefaultValue() => default;
 
-		private VT GetMethodValue()
+		private T GetMethodValue()
 		{
-			return (VT)_cachedInfo.Invoke(_ref.target, new object[0]);
+			return (T)_cachedInfo.Invoke(_ref.target, new object[0]);
 		}
 
 		[Serializable]

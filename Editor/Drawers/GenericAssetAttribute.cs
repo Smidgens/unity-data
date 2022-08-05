@@ -9,12 +9,15 @@ namespace Smidgenomics.Unity.Variables.Editor
 	using System.Collections.Generic;
 	using System.Linq;
 
-	[CustomPropertyDrawer(typeof(GenericAssetAttribute))]
-	internal class GenericAssetAttribute_Drawer : PropertyDrawer
+	[CustomPropertyDrawer(typeof(AssetValueSearchAttribute))]
+	internal class AssetValueSearch_Drawer : PropertyDrawer
 	{
 		public override void OnGUI(Rect pos, SP prop, GUIContent l)
 		{
-			var a = attribute as GenericAssetAttribute;
+
+			EditorGUI.BeginProperty(pos, l, prop);
+
+			var a = attribute as AssetValueSearchAttribute;
 
 			if (l != GUIContent.none && !fieldInfo.FieldType.IsArray)
 			{
@@ -30,9 +33,11 @@ namespace Smidgenomics.Unity.Variables.Editor
 
 			var rects = pos.SplitHorizontally(2.0, pos.height, 1f);
 
-			DrawPreview(rects[0], prop.objectReferenceValue);
+			var gtype = GetGenericType();
 
-			if (GUI.Button(rects[1], blabel, EditorStyles.popup))
+			//DrawPreview(rects[0], gtype, prop.objectReferenceValue);
+
+			if (GUI.Button(pos, blabel, EditorStyles.popup))
 			{
 				var type = fieldInfo.FieldType;
 
@@ -54,8 +59,6 @@ namespace Smidgenomics.Unity.Variables.Editor
 				});
 
 				m.AddSeparator("");
-
-				var gtype = GetGenericType();
 
 				var title = $"{EditorReflection.GetDisplayName(gtype)}";
 
@@ -79,16 +82,36 @@ namespace Smidgenomics.Unity.Variables.Editor
 				}
 				m.DropDown(pos);
 			}
+
+			EditorGUI.EndProperty();
 		}
 
-		private void DrawPreview(in Rect pos, UnityEngine.Object ob)
+		private void DrawPreview(in Rect pos, Type type, UnityEngine.Object ob)
 		{
-			var tex = ob
-			? AssetPreview.GetMiniThumbnail(ob)
-			: AssetPreview.GetMiniTypeThumbnail(typeof(ScriptableValue));
+			var ipos = pos;
+			ipos.size -= Vector2.one * 2f;
+			ipos.center = pos.center;
+
+			Texture tex = null;
+
+			if (typeof(UnityEngine.Object).IsAssignableFrom(type))
+			{
+				tex = AssetPreview.GetMiniTypeThumbnail(type);
+			}
+
+			if(!tex && ob)
+			{
+				tex = AssetPreview.GetMiniThumbnail(ob);
+			}
+
+			if (!tex)
+			{
+				tex = AssetPreview.GetMiniTypeThumbnail(typeof(ScriptableValue));
+			}
+
 			GUI.Box(pos, "");
 
-			if (tex) { GUI.DrawTexture(pos, tex); }
+			if (tex) { GUI.DrawTexture(ipos, tex); }
 
 			if(ob)
 			{
@@ -98,8 +121,6 @@ namespace Smidgenomics.Unity.Variables.Editor
 				{
 					EditorGUIUtility.PingObject(ob);
 				}
-
-
 			}
 		}
 
@@ -117,7 +138,7 @@ namespace Smidgenomics.Unity.Variables.Editor
 
 		private static string[] FindVariableAssets(Type t)
 		{
-			var guids = AssetDatabase.FindAssets("t:ScriptableValue");
+			var guids = AssetDatabase.FindAssets($"t:{nameof(ScriptableValue)}");
 			var r = new List<string>();
 			foreach (var guid in guids)
 			{
@@ -134,15 +155,10 @@ namespace Smidgenomics.Unity.Variables.Editor
 				{
 					if(t != vtype) { continue; }
 				}
-
-
 				if (vtype == t || t.IsAssignableFrom(vtype))
 				{
 					r.Add(path);
 				}
-
-				//if (vtype != t) { continue; }
-				//r.Add(path);
 			}
 
 			return r.ToArray();
