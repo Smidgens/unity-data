@@ -1,6 +1,6 @@
 ﻿// smidgens @ github
 
-namespace Smidgenomics.Unity.Variables
+namespace Smidgenomics.Unity.ScriptableData
 {
 	using UnityEngine;
 	using System;
@@ -10,55 +10,54 @@ namespace Smidgenomics.Unity.Variables
 	/// Reflection assisted reference to getter
 	/// </summary>
 	[Serializable]
-	public class WrappedSetter<VT>
+	public class Getter<T>
 	{
-		public void Invoke(VT v)
-		{
-			if (!Application.isEditor) { SetValueCached(v); }
-			else { SetValueUncached(v); }
-		}
+		public T Invoke() => GetValue();
 
 		[SerializeField] private MethodRef _ref = default;
 
 		// method references cached outside editor
-		private Action<VT> _cachedFn = null;
+		private Func<T> _cachedGetter = null;
 		private MethodInfo _cachedInfo = null;
+
+		private T GetValue()
+		{
+			if(!Application.isEditor) { return GetValueCached(); }
+			return GetValueUncached();
+		}
 
 		// loads getter using reflection
 		private MethodInfo LoadMethod()
 		{
 			if (!_ref.target) { return null; }
 			var tt = _ref.target.GetType();
-			return ReflectionUtility.FindMethod(_ref.method, tt, typeof(void), typeof(VT));
+			return ReflectionUtility.FindMethod(_ref.method, tt, typeof(T));
 		}
 
 		// loads method anew before value
-		private void SetValueUncached(VT v)
+		private T GetValueUncached()
 		{
 			var m = LoadMethod();
-			if(m != null)
-			{
-				m.Invoke(_ref.target, new object[] { v });
-			}
+			return m != null ? (T)m.Invoke(_ref.target, new object[0]) : default;
 		}
 
 		// loads and caches method info before value
-		private void SetValueCached(VT v)
+		private T GetValueCached()
 		{
-			if (_cachedFn == null)
+			if(_cachedGetter == null)
 			{
 				_cachedInfo = LoadMethod();
-				if (_cachedInfo != null) { _cachedFn = InvokeSet; }
-				else { _cachedFn = NoOp; }
+				if(_cachedInfo != null) { _cachedGetter = GetMethodValue; }
+				else { _cachedGetter = GetDefaultValue; }
 			}
-			_cachedFn.Invoke(v);
+			return _cachedGetter.Invoke();
 		}
 
-		private void NoOp(VT v) { }
+		private T GetDefaultValue() => default;
 
-		private void InvokeSet(VT v)
+		private T GetMethodValue()
 		{
-			_cachedInfo.Invoke(_ref.target, new object[] { v });
+			return (T)_cachedInfo.Invoke(_ref.target, new object[0]);
 		}
 
 		[Serializable]
@@ -72,11 +71,11 @@ namespace Smidgenomics.Unity.Variables
 
 #if UNITY_EDITOR
 
-namespace Smidgenomics.Unity.Variables.Editor
+namespace Smidgenomics.Unity.ScriptableData.Editor
 {
 	internal static partial class SPHelper
 	{
-		public static class WrappedMethod
+		public static class WrappedGetter
 		{
 			public const string
 			TARGET = "_ref.target",

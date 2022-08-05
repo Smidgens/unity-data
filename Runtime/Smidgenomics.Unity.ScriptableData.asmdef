@@ -1,6 +1,6 @@
 {
-    "name": "Smidgenomics.Unity.Variables",
-    "rootNamespace": "Smidgenomics.Unity.Variables",
+    "name": "Smidgenomics.Unity.ScriptableData",
+    "rootNamespace": "Smidgenomics.Unity.ScriptableData",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

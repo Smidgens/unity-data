@@ -1,6 +1,6 @@
 ﻿// smidgens @ github
 
-namespace Smidgenomics.Unity.Variables.Editor
+namespace Smidgenomics.Unity.ScriptableData.Editor
 {
 	using UnityEngine;
 	using System;
@@ -14,8 +14,8 @@ namespace Smidgenomics.Unity.Variables.Editor
 		Vector2, Vector3, Color, Curve,
 		// row 3
 		RefType, ValueType,
-		// row 4<
-		Arrow, Variable, Search,
+		// row 4
+		Arrow = 12, Variable = 13, Search = 14,
 	}
 
 	internal static class PluginIcons
@@ -37,8 +37,18 @@ namespace Smidgenomics.Unity.Variables.Editor
 		/// </summary>
 		public static void Draw(in Rect pos, PIcon n)
 		{
-			var i = (byte)n;
-			DrawCell(pos, i % CELLS, i / CELLS);
+			var (x, y) = GetCell(n);
+
+			Debug.Log(n + " " + x + "," + y);
+			DrawCell(pos, x, y);
+		}
+
+		private static (int,int) GetCell(in PIcon ico)
+		{
+			var i = (byte)ico;
+			var x = i % CELLS;
+			var y = i / CELLS;
+			return (x, y);
 		}
 
 		// image atlas

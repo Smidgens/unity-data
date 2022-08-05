@@ -1,6 +1,6 @@
 // smidgens @ github
 
-namespace Smidgenomics.Unity.Variables
+namespace Smidgenomics.Unity.ScriptableData
 {
 	using UnityEngine;
 	using System;
@@ -23,7 +23,6 @@ namespace Smidgenomics.Unity.Variables
 	/// <typeparam name="AT">Asset type supported</typeparam>
 	[Serializable]
 	public class Readable<T>
-	//public abstract class WrappedValue<T, AT> where AT : ScriptableValue
 	{
 		/// <summary>
 		/// Reads value
@@ -31,21 +30,19 @@ namespace Smidgenomics.Unity.Variables
 		public T Value => GetValue();
 
 		/// <summary>
-		/// Reads and stringifies current value
+		/// Stringifies value
 		/// </summary>
-		/// <returns>Stringified value</returns>
 		public override string ToString() => GetValue().ToString();
 
 		/// <summary>
-		/// Implicit conversion to return type
+		/// Implicit conversion to value
 		/// </summary>
-		/// <param name="valueSource">Instance</param>
 		public static implicit operator T(Readable<T> valueSource)
 		{
 			return valueSource.Value;
 		}
 
-		[AssetValueSearch(typeof(ScriptableValue))]
+		[GenericAsset(typeof(ScriptableValue))]
 		[SerializeField] internal ScriptableValue<T> _asset = default;
 		[SerializeField] private Getter<T> _method = default;
 		[SerializeField] private T _value = default;
@@ -56,27 +53,28 @@ namespace Smidgenomics.Unity.Variables
 		{
 			switch(_type)
 			{
-				case ValueSource.Static: return GetStaticValue();
-				case ValueSource.Asset: return GetAssetValue();
-				case ValueSource.Getter: return GetGetterValue();
+				case ValueSource.Static: return ReadStatic();
+				case ValueSource.Asset: return ReadAsset();
+				case ValueSource.Getter: return ReadFunction();
 			}
 			return default;
 		}
 
-		private T GetAssetValue()
+		private T ReadStatic() => _value;
+
+		private T ReadAsset()
 		{
 			if (!_asset) { return default; }
 			return _asset.Value;
 		}
 
-		private T GetStaticValue() => _value;
-		private T GetGetterValue() => _method.Invoke();
+		private T ReadFunction() => _method.Invoke();
 	}
 }
 
 #if UNITY_EDITOR
 
-namespace Smidgenomics.Unity.Variables.Editor
+namespace Smidgenomics.Unity.ScriptableData.Editor
 {
 	internal static partial class SPHelper
 	{

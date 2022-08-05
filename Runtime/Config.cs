@@ -1,12 +1,20 @@
 ﻿// smidgens @ github
 
-namespace Smidgenomics.Unity.Variables
+namespace Smidgenomics.Unity.ScriptableData
 {
 	/// <summary>
 	/// magic constants, lt.dan
 	/// </summary>
 	internal static class Config
 	{
+
+		public static class AddComponentMenu
+		{
+			public const string
+			EMIT_VALUES = _PREFIX + "Emit Values";
+			private const string _PREFIX = "Smidgenomics/Data/";
+		}
+
 		/// <summary>
 		/// CreateAssetMenuAttribute, menuName
 		/// </summary>

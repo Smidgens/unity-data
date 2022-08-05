@@ -1,21 +1,22 @@
 {
-	"name":"com.smidgenomics.unity-scriptable-variables",
+	"name":"com.smidgenomics.unity-scriptable-data",
 	"version":"0.1.0",
-	"displayName":"Scriptable Variables for Unity",
-	"description":"Values stored in Scriptable Objects.",
+	"displayName":"Scriptable Data for Unity",
+	"description":"Data abstraction wrappers.",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/Smidgens/unity-scriptable-variables.git"
+		"url": "git+https://github.com/Smidgens/unity-scriptable-data.git"
 	},
 	"author":{
 		"name":"Unnar Krist",
 		"url":"https://github.com/Smidgens"
 	},
 	"keywords":[
-		"unity-variables",
-		"scriptable-variables",
+		"data",
+		"unity-data",
+		"data-persistence",
+		"scriptable-data",
 		"runtime",
-		"variables",
 		"config"
 	]
 }

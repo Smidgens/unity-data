@@ -1,18 +1,13 @@
 ﻿// smidgens @ github
 
-
-namespace Smidgenomics.Unity.Variables
+namespace Smidgenomics.Unity.ScriptableData
 {
-
 	using UnityEngine;
 
-	[AddComponentMenu("Smidgenomics/Variables/Emit Value")]
+	[AddComponentMenu(Config.AddComponentMenu.EMIT_VALUES)]
 	internal class EmitValues : MonoBehaviour
 	{
-
-
-
+		// todo: useful stuff
 
 	}
-
 }

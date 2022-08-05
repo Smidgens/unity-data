@@ -28,7 +28,7 @@
 ### Reading data
 
 ```cs
-using Smidgenomics.Unity.Data;
+using Smidgenomics.Unity.ScriptableData;
 
 public class VariableTest : MonoBehaviour
 {
@@ -47,7 +47,7 @@ public class VariableTest : MonoBehaviour
 ```cs
 using UnityEngine;
 using System;
-using Smidgenomics.Unity.Data;
+using Smidgenomics.Unity.ScriptableData;
 
 [Serializable]
 class MySerializedType

@@ -1,6 +1,6 @@
 ﻿// smidgens @ github
 
-namespace Smidgenomics.Unity.Variables.Editor
+namespace Smidgenomics.Unity.ScriptableData.Editor
 {
 	using System;
 	using System.Collections.Generic;

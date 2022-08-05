@@ -4,18 +4,13 @@
 #pragma warning disable 0414
 
 
-namespace Smidgenomics.Unity.Variables
+namespace Smidgenomics.Unity.ScriptableData
 {
 	using UnityEngine;
 
-	public interface IValueRead<T>
+	public interface IReadableValue<T>
 	{
 		public T Value { get; }
-	}
-
-	public interface IValueWrite<T>
-	{
-		public T Value { set; }
 	}
 
 	/// <summary>
@@ -26,7 +21,7 @@ namespace Smidgenomics.Unity.Variables
 	/// <summary>
 	/// Typed variable
 	/// </summary>
-	public abstract class ScriptableValue<T> : ScriptableValue, IValueRead<T>
+	public abstract class ScriptableValue<T> : ScriptableValue, IReadableValue<T>
 	{
 		public T Value => _value;
 		[SerializeField] private T _value = default;

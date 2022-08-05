@@ -1,6 +1,6 @@
 // smidgens @ github
 
-namespace Smidgenomics.Unity.Variables.Editor
+namespace Smidgenomics.Unity.ScriptableData.Editor
 {
 	/// <summary>
 	/// magic constants, lt.dan
@@ -11,7 +11,7 @@ namespace Smidgenomics.Unity.Variables.Editor
 		public static class ResourcePath
 		{
 			public const string ICON_ATLAS = _PATH + "/{icons}";
-			private const string _PATH = "smidgenomics.scriptable-variables";
+			private const string _PATH = "smidgenomics.scriptable-data";
 		}
 
 		public static class Label

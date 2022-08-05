@@ -1,16 +1,16 @@
 ﻿// smidgens @ github
 
-namespace Smidgenomics.Unity.Variables
+namespace Smidgenomics.Unity.ScriptableData
 {
 	using System;
 	using UnityEngine;
 
 	[AttributeUsage(AttributeTargets.Field)]
-	internal class AssetValueSearchAttribute : PropertyAttribute
+	internal class GenericAssetAttribute : PropertyAttribute
 	{
 		public Type BaseType { get; }
 
-		public AssetValueSearchAttribute(Type t)
+		public GenericAssetAttribute(Type t)
 		{
 			BaseType = t;
 		}

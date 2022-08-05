@@ -1,6 +1,6 @@
 ﻿// smidgens @ github
 
-namespace Smidgenomics.Unity.Variables.Editor
+namespace Smidgenomics.Unity.ScriptableData.Editor
 {
 	using UnityEngine;
 	using UnityEditor;
@@ -9,15 +9,15 @@ namespace Smidgenomics.Unity.Variables.Editor
 	using System.Collections.Generic;
 	using System.Linq;
 
-	[CustomPropertyDrawer(typeof(AssetValueSearchAttribute))]
-	internal class AssetValueSearch_Drawer : PropertyDrawer
+	[CustomPropertyDrawer(typeof(GenericAssetAttribute))]
+	internal class GenericAsset_Drawer : PropertyDrawer
 	{
 		public override void OnGUI(Rect pos, SP prop, GUIContent l)
 		{
 
 			EditorGUI.BeginProperty(pos, l, prop);
 
-			var a = attribute as AssetValueSearchAttribute;
+			var a = attribute as GenericAssetAttribute;
 
 			if (l != GUIContent.none && !fieldInfo.FieldType.IsArray)
 			{

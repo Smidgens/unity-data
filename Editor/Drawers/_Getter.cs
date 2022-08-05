@@ -1,6 +1,6 @@
 ﻿// smidgens @ github
 
-namespace Smidgenomics.Unity.Variables.Editor
+namespace Smidgenomics.Unity.ScriptableData.Editor
 {
 	using UnityEngine;
 	using UnityEditor;
@@ -8,12 +8,12 @@ namespace Smidgenomics.Unity.Variables.Editor
 	using SP = UnityEditor.SerializedProperty;
 	using System;
 
-	[CustomPropertyDrawer(typeof(WrappedSetter<>))]
-	internal class WrappedSetter_Drawer : PropertyDrawer
+	[CustomPropertyDrawer(typeof(Getter<>))]
+	internal class Getter_Drawer : PropertyDrawer
 	{
 		public override float GetPropertyHeight(SP prop, GUIContent label)
 		{
-			if (fieldInfo.FieldType.IsArray)
+			if (label == GUIContent.none)
 			{
 				return EditorGUIUtility.singleLineHeight;
 			}
@@ -24,9 +24,18 @@ namespace Smidgenomics.Unity.Variables.Editor
 		{
 			using (new EditorGUI.PropertyScope(pos, l, prop))
 			{
-				var target = prop.FindPropertyRelative(SPHelper.WrappedMethod.TARGET);
-				var type = prop.FindPropertyRelative(SPHelper.WrappedMethod.TYPE);
-				var method = prop.FindPropertyRelative(SPHelper.WrappedMethod.METHOD);
+				var target = prop.FindPropertyRelative(SPHelper.WrappedGetter.TARGET);
+				var type = prop.FindPropertyRelative(SPHelper.WrappedGetter.TYPE);
+				var method = prop.FindPropertyRelative(SPHelper.WrappedGetter.METHOD);
+
+				var rows =
+				!fieldInfo.FieldType.IsArray;
+
+				// temporary hack
+				if(pos.height < EditorGUIUtility.singleLineHeight + 5f)
+				{
+					rows = false;
+				}
 
 				// label
 				if (l != GUIContent.none && !fieldInfo.FieldType.IsArray)
@@ -34,20 +43,16 @@ namespace Smidgenomics.Unity.Variables.Editor
 					pos = EditorGUI.PrefixLabel(pos, l);
 				}
 
-				//pos.height = EditorGUIUtility.singleLineHeight;
-
-
-				var rects = GetFieldRects(pos);
+				var rects = GetFieldRects(pos, rows);
 
 				TargetField(rects[0], target, type, method);
 				MethodField(rects[1], target, type, method);
 			}
-
 		}
 
-		private Rect[] GetFieldRects(Rect pos)
+		private Rect[] GetFieldRects(Rect pos, bool rows)
 		{
-			if (!fieldInfo.FieldType.IsArray)
+			if (rows)
 			{
 				var t = pos;
 				t.height = EditorGUIUtility.singleLineHeight;
@@ -55,6 +60,7 @@ namespace Smidgenomics.Unity.Variables.Editor
 				b.position += new Vector2(0f, t.height + 2f);
 				return new Rect[] { t, b };
 			}
+
 			var cols = pos.width < Config.WrappedMethod.FIXED_BREAKPOINT
 			? pos.SplitHorizontally(2.0, Config.WrappedMethod.SIZES_FLUID)
 			: pos.SplitHorizontally(2.0, Config.WrappedMethod.SIZES_FIXED);
@@ -78,18 +84,18 @@ namespace Smidgenomics.Unity.Variables.Editor
 			var valueType = fieldInfo.GetFirstGenericType();
 			if (valueType == null) { return; }
 
+			var label = GetButtonLabel
+			(
+				target.objectReferenceValue,
+				method.stringValue,
+				valueType
+			);
+
 			using(new EditorGUI.DisabledScope(!target.objectReferenceValue))
 			{
-				var label = GetButtonLabel
-				(
-					target.objectReferenceValue,
-					method.stringValue,
-					valueType
-				);
-
 				if (GUI.Button(pos, label, EditorStyles.popup))
 				{
-					var m = GetMethodOptions(
+					var m = GetOptions(
 						target.objectReferenceValue,
 						valueType,
 						method.stringValue,
@@ -111,11 +117,11 @@ namespace Smidgenomics.Unity.Variables.Editor
 			if (!t || string.IsNullOrEmpty(method)) { return Config.Label.NO_FUNCTION_SET; }
 			var mname = EditorReflection.FormatMethodName(method);
 			var label = $"{t.GetType().Name}.{mname}";
-			var m = ReflectionUtility.FindMethod(method, t.GetType(), typeof(void), rtype);
+			var m = ReflectionUtility.FindMethod(method, t.GetType(), rtype);
 			return m != null ? label : $"<Missing {label}>";
 		}
 
-		private static GenericMenu GetMethodOptions(UOB t, Type rt, string v, Action<UOB, string> onSelect)
+		private static GenericMenu GetOptions(UOB t, Type rt, string v, Action<UOB, string> onSelect)
 		{
 			var m = new GenericMenu();
 
@@ -126,14 +132,14 @@ namespace Smidgenomics.Unity.Variables.Editor
 			m.AddSeparator("");
 			m.AddDisabledItem(new GUIContent("Dynamic " + EditorReflection.GetDisplayName(rt)));
 
-			var ol = EditorReflection.FindCallableMethods(t, typeof(void), rt);
+			var ol = EditorReflection.FindCallableMethods(t, rt);
 
-			if (ol.Length == 0)
+			if(ol.Length == 0)
 			{
 				m.AddDisabledItem(new GUIContent("No Options"));
 			}
 
-			foreach (var o in ol)
+			foreach(var o in ol)
 			{
 				var ov = o;
 				var active = v == o.method && t == o.target;
@@ -143,5 +149,7 @@ namespace Smidgenomics.Unity.Variables.Editor
 			return m;
 		}
 
+
+	
 	}
 }

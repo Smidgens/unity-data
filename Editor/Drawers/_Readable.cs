@@ -1,6 +1,6 @@
 ﻿// smidgens @ github
 
-namespace Smidgenomics.Unity.Variables.Editor
+namespace Smidgenomics.Unity.ScriptableData.Editor
 {
 	using UnityEditor;
 	using UnityEngine;
@@ -11,7 +11,7 @@ namespace Smidgenomics.Unity.Variables.Editor
 	/// Custom drawer for value ref
 	/// </summary>
 	[CustomPropertyDrawer(typeof(Readable<>), true)]
-	internal class WrappedValue_Drawer : PropertyDrawer
+	internal class Readable_Drawer : PropertyDrawer
 	{
 
 		// [type][value]
