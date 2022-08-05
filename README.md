@@ -37,8 +37,8 @@ public class VariableTest : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log("Number 1: " + num1);
-        Debug.Log("Number 2: " + num2);
+        Debug.Log("Number 1: " + num1.Value);
+        Debug.Log("Number 2: " + num2); // implicit conversion
     }	
 }
 
