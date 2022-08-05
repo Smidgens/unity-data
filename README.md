@@ -32,8 +32,8 @@ using Smidgenomics.Unity.Data;
 
 public class VariableTest : MonoBehaviour
 {
-    public Readable<int> num1; // from any source
-    public Readable<int> num2; // from any source
+    public Readable<int> num1;
+    public Readable<int> num2;
 
     private void Awake()
     {
