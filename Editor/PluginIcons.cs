@@ -35,11 +35,9 @@ namespace Smidgenomics.Unity.ScriptableData.Editor
 		/// <summary>
 		/// Draw icon
 		/// </summary>
-		public static void Draw(in Rect pos, PIcon n)
+		public static void Draw(in Rect pos, in PIcon n)
 		{
 			var (x, y) = GetCell(n);
-
-			Debug.Log(n + " " + x + "," + y);
 			DrawCell(pos, x, y);
 		}
 
