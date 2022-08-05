@@ -1,6 +1,6 @@
 ﻿// smidgens @ github
 
-namespace Smidgenomics.Unity.ScriptableData.Editor
+namespace Smidgenomics.Unity.Data.Editor
 {
 	using UnityEngine;
 	using System;

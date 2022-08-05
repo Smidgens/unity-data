@@ -1,6 +1,6 @@
 ﻿// smidgens @ github
 
-namespace Smidgenomics.Unity.ScriptableData
+namespace Smidgenomics.Unity.Data
 {
 	/// <summary>
 	/// magic constants, lt.dan

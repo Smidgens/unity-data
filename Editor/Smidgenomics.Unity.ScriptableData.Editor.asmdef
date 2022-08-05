@@ -1,6 +1,6 @@
 {
-    "name": "Smidgenomics.Unity.ScriptableData.Editor",
-    "rootNamespace": "Smidgenomics.Unity.ScriptableData.Editor",
+    "name": "Smidgenomics.Unity.Data.Editor",
+    "rootNamespace": "Smidgenomics.Unity.Data.Editor",
     "references": [
         "GUID:d810a36559b93af46a4b92c732c7059f"
     ],

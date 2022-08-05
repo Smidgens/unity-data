@@ -1,6 +1,6 @@
 // smidgens @ github
 
-namespace Smidgenomics.Unity.ScriptableData
+namespace Smidgenomics.Unity.Data
 {
 	using UnityEngine;
 	using System;
@@ -74,7 +74,7 @@ namespace Smidgenomics.Unity.ScriptableData
 
 #if UNITY_EDITOR
 
-namespace Smidgenomics.Unity.ScriptableData.Editor
+namespace Smidgenomics.Unity.Data.Editor
 {
 	internal static partial class SPHelper
 	{

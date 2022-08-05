@@ -1,11 +1,11 @@
 {
-	"name":"com.smidgenomics.unity-scriptable-data",
+	"name":"com.smidgenomics.unity-data",
 	"version":"0.1.0",
-	"displayName":"Scriptable Data for Unity",
+	"displayName":"Scriptable Data",
 	"description":"Data abstraction wrappers.",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/Smidgens/unity-scriptable-data.git"
+		"url": "git+https://github.com/Smidgens/unity-data.git"
 	},
 	"author":{
 		"name":"Unnar Krist",

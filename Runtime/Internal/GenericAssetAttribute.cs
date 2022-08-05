@@ -1,6 +1,6 @@
 ﻿// smidgens @ github
 
-namespace Smidgenomics.Unity.ScriptableData
+namespace Smidgenomics.Unity.Data
 {
 	using System;
 	using UnityEngine;

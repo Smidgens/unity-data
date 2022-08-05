@@ -1,6 +1,6 @@
 ﻿// smidgens @ github
 
-namespace Smidgenomics.Unity.ScriptableData.Editor
+namespace Smidgenomics.Unity.Data.Editor
 {
 	using UnityEngine;
 
@@ -39,7 +39,7 @@ namespace Smidgenomics.Unity.ScriptableData.Editor
 	}
 }
 
-namespace Smidgenomics.Unity.ScriptableData.Editor
+namespace Smidgenomics.Unity.Data.Editor
 {
 	using System.Linq;
 
@@ -60,7 +60,7 @@ namespace Smidgenomics.Unity.ScriptableData.Editor
 }
 
 
-namespace Smidgenomics.Unity.ScriptableData.Editor
+namespace Smidgenomics.Unity.Data.Editor
 {
 	using System;
 	using System.Reflection;

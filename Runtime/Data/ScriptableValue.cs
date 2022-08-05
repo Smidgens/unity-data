@@ -1,10 +1,6 @@
 // smidgens @ github
 
-// suppress warning about unused _description field
-#pragma warning disable 0414
-
-
-namespace Smidgenomics.Unity.ScriptableData
+namespace Smidgenomics.Unity.Data
 {
 	using UnityEngine;
 
