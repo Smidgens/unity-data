@@ -8,7 +8,7 @@ namespace Smidgenomics.Unity.Variables.Editor
 	using SP = UnityEditor.SerializedProperty;
 	using System;
 
-	[CustomPropertyDrawer(typeof(WrappedGetter<>))]
+	[CustomPropertyDrawer(typeof(Getter<>))]
 	internal class WrappedGetter_Drawer : PropertyDrawer
 	{
 		public override float GetPropertyHeight(SP prop, GUIContent label)

@@ -14,8 +14,8 @@ namespace Smidgenomics.Unity.Variables.Editor
 		Vector2, Vector3, Color, Curve,
 		// row 3
 		RefType, ValueType,
-		// row 4
-		Arrow, Variable,
+		// row 4<
+		Arrow, Variable, Search,
 	}
 
 	internal static class PluginIcons

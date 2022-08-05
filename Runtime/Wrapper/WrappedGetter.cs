@@ -10,7 +10,7 @@ namespace Smidgenomics.Unity.Variables
 	/// Reflection assisted reference to getter
 	/// </summary>
 	[Serializable]
-	public class WrappedGetter<T>
+	public class Getter<T>
 	{
 		public T Invoke() => GetValue();
 

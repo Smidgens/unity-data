@@ -10,7 +10,7 @@ namespace Smidgenomics.Unity.Variables.Editor
 	/// <summary>
 	/// Custom drawer for value ref
 	/// </summary>
-	[CustomPropertyDrawer(typeof(WrappedValue<>), true)]
+	[CustomPropertyDrawer(typeof(Readable<>), true)]
 	internal class WrappedValue_Drawer : PropertyDrawer
 	{
 

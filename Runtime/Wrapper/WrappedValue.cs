@@ -22,7 +22,7 @@ namespace Smidgenomics.Unity.Variables
 	/// <typeparam name="T">Value type</typeparam>
 	/// <typeparam name="AT">Asset type supported</typeparam>
 	[Serializable]
-	public class WrappedValue<T>
+	public class Readable<T>
 	//public abstract class WrappedValue<T, AT> where AT : ScriptableValue
 	{
 		/// <summary>
@@ -40,14 +40,14 @@ namespace Smidgenomics.Unity.Variables
 		/// Implicit conversion to return type
 		/// </summary>
 		/// <param name="valueSource">Instance</param>
-		public static implicit operator T(WrappedValue<T> valueSource)
+		public static implicit operator T(Readable<T> valueSource)
 		{
 			return valueSource.Value;
 		}
 
 		[AssetValueSearch(typeof(ScriptableValue))]
 		[SerializeField] internal ScriptableValue<T> _asset = default;
-		[SerializeField] private WrappedGetter<T> _method = default;
+		[SerializeField] private Getter<T> _method = default;
 		[SerializeField] private T _value = default;
 		[SerializeField] private ValueSource _type = ValueSource.Static;
 
