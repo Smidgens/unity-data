@@ -32,11 +32,13 @@ using Smidgenomics.Unity.Data;
 
 public class VariableTest : MonoBehaviour
 {
-    public Readable<int> myInt; // from any source
+    public Readable<int> num1; // from any source
+    public Readable<int> num2; // from any source
 
     private void Awake()
     {
-        Debug.Log("My number is " + myInt);
+        Debug.Log("Number 1: " + num1);
+        Debug.Log("Number 2: " + num2);
     }	
 }
 
