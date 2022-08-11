@@ -7,7 +7,7 @@
 * ScriptableObject persistence for data.
 * Data abstraction in code.
 * Configure data sources in Inspector: static, asset, or function (reflection).
-* Reasonably lightweight.
+* 🤞 Reasonably lightweight.
 
 
 
