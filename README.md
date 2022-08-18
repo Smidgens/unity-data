@@ -2,7 +2,7 @@
 ![](/.github/gallery.png?raw=true "")
 
 
-## ℹ️ Features
+# ℹ️ Features
 
 * ScriptableObject persistence for data.
 * Data abstraction in code.
@@ -13,7 +13,7 @@
 
 <br/>
 
-## 📦 Install
+# 📦 Install
 
 1. Open Package Manager
 2. Paste git URL (`<github_url>#<desired_tag>`)
@@ -21,7 +21,7 @@
 
 <br/>
 
-## 🚀 Usage
+# 🚀 Usage
 
 🧩 **Note**: To use plugin in code you need to add an assembly reference.
 
